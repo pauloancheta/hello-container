@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+
+  hello_container:
+    environment:
+      - DB_USERNAME=test
+      - DB_PASSWORD=test
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    build: .
+    volumes:
+      - .:/hello_container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+    volumes:
+      - /var/lib/postgresql/data
