@@ -10,6 +10,8 @@ RUN bundle install
 
 ADD . .
 
+ADD nginx.conf /etc/nginx/main.d/env.conf
+
 EXPOSE 3000
 
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

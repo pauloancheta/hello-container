@@ -8,11 +8,10 @@ services:
       - DB_PASSWORD=test
       - DB_HOST=postgres
       - DB_PORT=5432
+      - VIRTUAL_HOST=localhost
     build: .
     volumes:
       - .:/hello_container
-    ports:
-      - "3000:3000"
     depends_on:
       - postgres
     command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
@@ -24,3 +23,13 @@ services:
       - POSTGRES_PASSWORD=test
     volumes:
       - /var/lib/postgresql/data
+
+  nginx:
+    image: jwilder/nginx-proxy
+    volumes:
+      # It needs to access Docker's API, so we mount the Unix socket
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    # Listens on port 80, accessed by our host on http://localhost
+    ports:
+      - "80:80"
+
